@@ -34,10 +34,17 @@ try:
 
                 # 仮の速度位置（31バイト目から2バイト）
                 speed = struct.unpack('<H', data[29:31])[0]
+
+                # gear
+                gear_raw = data[44]
+                if gear_raw == 0:
+                    gear_raw = "N"  # Neutral
+                elif gear_raw == 255:
+                    gear_raw = "R"  # Reverse
                 
                 # 速度が0より大きい時だけ表示（ノイズ対策）
                 if speed >= 0:
-                    print(f"\r[Telemetry] Format: {packet_format} | Speed: {speed} km/h", end="")
+                    print(f"\r[Telemetry] Format: {packet_format} | Speed: {speed} km/h | Gear: {gear_raw}", end="")
                 
             except Exception as e:
                 print(f"\n解析エラー: {e}")
