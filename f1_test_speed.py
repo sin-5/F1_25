@@ -36,16 +36,21 @@ try:
                 speed = struct.unpack('<H', data[29:31])[0]
 
                 # gear
-                gear_raw = data[44]
-                if gear_raw == 0:
-                    gear_raw = "N"  # Neutral
-                elif gear_raw == 255:
-                    gear_raw = "R"  # Reverse
+                gear = data[44]
+                if gear == 0:
+                    gear = "N"  # Neutral
+                elif gear == 255:
+                    gear = "R"  # Reverse
+                
+                # Throttle, Brake
+                throttle_raw = struct.unpack('<f', data[31:35])[0]
+                brake_raw = struct.unpack('<f', data[39:43])[0]
+                throttle_pct = int(throttle_raw * 100)
+                brake_pct = int(brake_raw * 100)
                 
                 # 速度が0より大きい時だけ表示（ノイズ対策）
                 if speed >= 0:
-                    print(f"\r[Telemetry] Format: {packet_format} | Speed: {speed} km/h | Gear: {gear_raw}", end="")
-                
+                    print(f"\r[Telemetry] Speed: {speed:3} km/h | Gear: {gear} | Throttle: {throttle_pct:3}% | Brake: {brake_pct:3}% ", end="")                
             except Exception as e:
                 print(f"\n解析エラー: {e}")
 
