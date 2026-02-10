@@ -47,10 +47,13 @@ try:
                 brake_raw = struct.unpack('<f', data[39:43])[0]
                 throttle_pct = int(throttle_raw * 100)
                 brake_pct = int(brake_raw * 100)
+
+                # RPM
+                rpm = struct.unpack('<H', data[45:47])[0]
                 
                 # 速度が0より大きい時だけ表示（ノイズ対策）
                 if speed >= 0:
-                    print(f"\r[Telemetry] Speed: {speed:3} km/h | Gear: {gear} | Throttle: {throttle_pct:3}% | Brake: {brake_pct:3}% ", end="")                
+                    print(f"\r[Telemetry] Speed: {speed:3} km/h | Gear: {gear} | Throttle: {throttle_pct:3}% | Brake: {brake_pct:3}% | RPM: {rpm}", end="")                
             except Exception as e:
                 print(f"\n解析エラー: {e}")
 
